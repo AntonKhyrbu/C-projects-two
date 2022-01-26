@@ -1,6 +1,8 @@
+from tkinter import Y
+from turtle import width
 import pygame
 import random
-from pygame import draw
+from pygame import draw, image
 
 
 pygame.init()
@@ -11,41 +13,32 @@ display_height = 600
 display = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Dinozorg')
 
+cactus_img = [pygame.image.load('Cactus0.PNG'), pygame.image.load('Cactus1.PNG'), pygame.image.load('Cactus2.PNG')]
+cactus_options = [64, 441, 37, 412, 39, 419]
+
 class Cactus:
-    def __init__(self, x, y, width, height, speed):
+    def __init__(self, x, y, width, image, speed):
         self.x = x
         self.y = y
         self.width = width
-        self.height = height
+        self.image = image
         self.speed = speed
 
     def move(self):
         if self.x >= -self.width:
-            pygame.draw.rect(display, (12, 30, 55),(self.x, self.y, self.width, self.height))
+            display.blit(self.image, (self.x, self.y))
+            # pygame.draw.rect(display, (12, 30, 55),(self.x, self.y, self.width, self.height))
             self.x -= self.speed
             return True
         else:
-            # self.x = display_width + 100 + random.randrange(-80, 60)
-            return True
+            return False
 
-    def return_self(self, radius):
+    def return_self(self, radius, y, width, image):
         self.x = radius
-
-
-class Cactus:
-    def __init__(self, x, y, width, height, speed):
-        self.x = x
         self.y = y
         self.width = width
-        self.height = height
-        self.speed = speed
-    
-    def move(self):
-        if self.x >= -self.width:
-            pygame.draw.rect(display, (12, 30, 55),(self.x, self.y, self.width, self.height))
-            self.x -= self.speed
-        else:
-            self.x = display_width + 50 
+        self.image = image
+        display.blit(self.image, (self.x, self.y))
 
 
 usr_width = 60
@@ -68,6 +61,7 @@ def run_game():
     game = True
     cactus_arr = []
     create_cactus_arr(cactus_arr)
+    land = pygame.image.load(r'field.jpg')
 
     while game:
         for event in pygame.event.get():
@@ -83,14 +77,12 @@ def run_game():
             jump()
 
 
-        display.fill((201, 215, 230))
+        display.blit(land, (0, 0))
         draw_array(cactus_arr)
 
 
         pygame.draw.rect(display, (240, 120, 100), (usr_x, usr_y, usr_width, usr_height))
         
-
-
         pygame.display.update()
         clock.tick(75)
 
@@ -106,9 +98,23 @@ def jump():
 
 
 def create_cactus_arr(array):
-    array.append(Cactus(display_width + 20, display_height - 170, 20, 70, 4))
-    array.append(Cactus(display_width + 300, display_height - 150, 30, 50, 4))
-    array.append(Cactus(display_width + 600, display_height - 180, 25, 80, 4))           
+    choice = random.randrange(0, 3)
+    img = cactus_img[choice]
+    width = cactus_options[choice * 2]
+    height = cactus_options[choice * 2 + 1]
+    array.append(Cactus(display_width + 20, height, width, img, 4))
+    
+    choice = random.randrange(0, 3)
+    img = cactus_img[choice]
+    width = cactus_options[choice * 2]
+    height = cactus_options[choice * 2 + 1]
+    array.append(Cactus(display_width + 300, height, width, img, 4))
+
+    choice = random.randrange(0, 3)
+    img = cactus_img[choice]
+    width = cactus_options[choice * 2]
+    height = cactus_options[choice * 2 + 1]
+    array.append(Cactus(display_width + 600, height, width, img, 4))
 
 
 def find_radius(array):
@@ -134,8 +140,12 @@ def draw_array(array):
         check = cactus.move()
         if not check:
             radius = find_radius(array)
-            cactus.return_self(radius)
 
+            choice = random.randrange(0, 3)
+            img = cactus_img[choice]
+            width = cactus_options[choice * 2]
+            height = cactus_options[choice * 2 + 1]
 
+            cactus.return_self(radius, height, width, img)
 
 run_game()
