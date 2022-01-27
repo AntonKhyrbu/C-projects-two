@@ -16,6 +16,10 @@ pygame.display.set_caption('Dinozorg')
 cactus_img = [pygame.image.load('Cactus0.PNG'), pygame.image.load('Cactus1.PNG'), pygame.image.load('Cactus2.PNG')]
 cactus_options = [64, 441, 38, 413, 39, 419]
 
+dino_img = [pygame.image.load('Dino0.PNG'), pygame.image.load('Dino1.PNG'), pygame.image.load('Dino2.PNG'), pygame.image.load('Dino3.PNG'), pygame.image.load('Dino4.PNG')]
+
+img_counter = 5
+
 class Cactus:
     def __init__(self, x, y, width, image, speed):
         self.x = x
@@ -81,7 +85,8 @@ def run_game():
         draw_array(cactus_arr)
 
 
-        pygame.draw.rect(display, (240, 120, 100), (usr_x, usr_y, usr_width, usr_height))
+        # pygame.draw.rect(display, (240, 120, 100), (usr_x, usr_y, usr_width, usr_height))
+        draw_dino()
         
         pygame.display.update()
         clock.tick(75)
@@ -147,5 +152,13 @@ def draw_array(array):
             height = cactus_options[choice * 2 + 1]
 
             cactus.return_self(radius, height, width, img)
+
+def draw_dino():
+    global img_counter
+    if img_counter == 25:
+        img_counter = 0
+
+    display.blit(dino_img[img_counter // 5], (usr_x, usr_y))
+    img_counter += 1    
 
 run_game()
