@@ -14,7 +14,7 @@ display = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Dinozorg')
 
 cactus_img = [pygame.image.load('Cactus0.PNG'), pygame.image.load('Cactus1.PNG'), pygame.image.load('Cactus2.PNG')]
-cactus_options = [64, 441, 37, 412, 39, 419]
+cactus_options = [64, 441, 38, 413, 39, 419]
 
 class Cactus:
     def __init__(self, x, y, width, image, speed):
