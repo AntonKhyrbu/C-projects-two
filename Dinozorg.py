@@ -31,7 +31,6 @@ class Cactus:
     def move(self):
         if self.x >= -self.width:
             display.blit(self.image, (self.x, self.y))
-            # pygame.draw.rect(display, (12, 30, 55),(self.x, self.y, self.width, self.height))
             self.x -= self.speed
             return True
         else:
@@ -75,7 +74,10 @@ def run_game():
         
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:          
-            make_jump = True        
+            make_jump = True
+        if keys[pygame.K_ESCAPE]:
+            pause()
+
 
         if make_jump:
             jump()
@@ -85,12 +87,14 @@ def run_game():
         draw_array(cactus_arr)
 
 
-        # pygame.draw.rect(display, (240, 120, 100), (usr_x, usr_y, usr_width, usr_height))
         draw_dino()
+
+        if check_collision(cactus_arr):
+            game = False
         
         pygame.display.update()
         clock.tick(75)
-
+    return game_over()
 
 def jump():
     global usr_y, jump_counter, make_jump
@@ -161,4 +165,54 @@ def draw_dino():
     display.blit(dino_img[img_counter // 5], (usr_x, usr_y))
     img_counter += 1    
 
-run_game()
+def check_collision(barriers):
+    for barrier in barriers:
+        if usr_y + usr_height >= barrier.y:
+            if barrier.x <= usr_x <= barrier.x + barrier.width:
+                return True
+            elif barrier.x <= usr_x + usr_width <= barrier.x + barrier.width:
+                return True
+    return False            
+
+def print_text(message, x, y, font_color = (0, 0, 0), font_type = 'ImpactRegular.ttf', font_size = 30):
+    font_type = pygame.font.Font(font_type, font_size)
+    text = font_type.render(message, True, font_color)
+    display.blit(text, (x, y))
+
+def pause():
+    paused = True
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        print_text('Paused. Press Enter to play continue', 160, 300)
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RETURN]:
+            paused = False
+
+        pygame.display.update()
+        clock.tick(15)
+
+def game_over():
+    stopped = True
+    while stopped:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        print_text('Game over. Press Enter to play again, Esc to exit', 160, 300)
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RETURN]:
+            return True
+        if keys[pygame.K_ESCAPE]:
+            return False
+
+while run_game():
+    pass
+pygame.quit()
+quit()
