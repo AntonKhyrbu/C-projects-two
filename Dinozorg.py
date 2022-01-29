@@ -90,6 +90,7 @@ def run_game():
         draw_dino()
 
         if check_collision(cactus_arr):
+            print_text('Game over. Press Enter to play again, Esc to exit', 160, 300)
             game = False
         
         pygame.display.update()
@@ -187,7 +188,7 @@ def pause():
                 pygame.quit()
                 quit()
 
-        print_text('Paused. Press Enter to play continue', 160, 300)
+        print_text('Paused. Press Enter to play continue', 80, 300)
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RETURN]:
@@ -203,8 +204,6 @@ def game_over():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-
-        print_text('Game over. Press Enter to play again, Esc to exit', 160, 300)
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RETURN]:
